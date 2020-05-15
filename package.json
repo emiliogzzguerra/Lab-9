@@ -1,0 +1,30 @@
+{
+  "name": "bookmarks-app",
+  "version": "1.0.0",
+  "description": "This is my first server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Alfredo Salazar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "mongoose": "^5.9.12",
+    "morgan": "^1.10.0",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emiliogzzguerra/Lab-7.git"
+  },
+  "bugs": {
+    "url": "https://github.com/emiliogzzguerra/Lab-7/issues"
+  },
+  "homepage": "https://github.com/emiliogzzguerra/Lab-7#readme"
+}
