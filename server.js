@@ -2,15 +2,28 @@ const express = require( 'express' );
 const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
 const uuid = require('uuid');
+const cors = require('cors');
 const mongoose = require( 'mongoose' );
 const validateToken = require('./middleware/validateToken');
 const { Bookmarks } = require('./models/bookmarkModel')
 const { check, validationResult } = require('express-validator');
 const { DATABASE_URL, PORT } = require('./config');
 
+
+var whitelist = ['https://web-dev-lab-9.herokuapp.com/', 'http://localhost:8080']
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+        } else {
+        callback(new Error('Not allowed by CORS'))
+        }
+}
+}
 const app = express();
 const jsonParser = bodyParser.json();
 
+app.use(cors(corsOptions));
 app.use( express.static( 'public' ));
 app.use(morgan('dev'));
 app.use(validateToken)
