@@ -11,8 +11,14 @@ const { DATABASE_URL, PORT } = require('./config');
 const app = express();
 const jsonParser = bodyParser.json();
 
+app.use( express.static( 'public' ));
 app.use(morgan('dev'));
 app.use(validateToken)
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+    console.log(process.env)
+}
 
 app.get( '/bookmarks', ( req, res ) => {
     console.log("Entered the route...")
@@ -90,9 +96,13 @@ app.delete( '/bookmark/:id', ( req, res ) => {
     let bookmarkId = req.params.id;
     Bookmarks
         .deleteBookmark(bookmarkId)
-        .then(res => {
-            return res.status( 200 );
+        .then(response => {
+            console.log(response);
+            console.log("inside app.delete");
+            return res.status( 200 ).end();
         }).catch(err => {
+            console.log("inside app.delete - error");
+            res.statusMessage = "Something wrong happened with the DB";
             return res.status( 500 ).end();
         })
 });

@@ -29,20 +29,29 @@ const bookmarksCollection = mongoose.model( 'bookmarks', bookmarksSchema );
 const Bookmarks = {
     updateBookmark: function(id, newBookmark) {
         return bookmarksCollection
-        .findOneAndUpdate({ "id": id }, { "$set": newBookmark}, { useFindAndModify: false, new: true }, (err, found) => {
-            if (!found) {
-                return null;
-            }
-            return found;
+        .findOneAndUpdate({ "id": id }, { "$set": newBookmark}, { useFindAndModify: false, new: true })
+        .then(result => {
+            return result;
+        }).catch(err => {
+            return err;
         });
     },
     deleteBookmark : function(id) {
+        console.log("here brotherr");
         return bookmarksCollection
-                .deleteOne({id: id}, (err, res) => {
-                    if (err) {
-                        return res.status( 404 ).end();
+                .deleteOne({id: id})
+                .then(result => {
+                    console.log(result);
+                    if (result.deletedCount > 0) {
+                        console.log("success!!!");
+                        return result;
+                    } else {
+                        throw new Error("Didn't find this id")
                     }
-                    return res;
+                })
+                .catch(err => {
+                    console.log("found an error");
+                    return err;
                 })
     },
     getBookmark : function(title) {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./css/index.css" rel="stylesheet" type="text/css"/>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Students app</h1>
+    <script src="./js/index.js"></script>
+    <form id="create-bookmark">
+        <label for="bookmark-title">Bookmark title:</label>
+        <input id="bookmark-title" type="text" />
+        <label for="bookmark-description">Bookmark description:</label>
+        <input id="bookmark-description" type="text" />
+        <label for="bookmark-url">Bookmark url:</label>
+        <input id="bookmark-url" type="text" />
+        <label for="bookmark-rating">Bookmark rating:</label>
+        <input id="bookmark-rating" type="number" />
+        <button type="submit" id="get-students">
+            Create bookmark
+        </button>
+    </form>
+    <div class="errors" id="errors"></div>
+    <h2>Results:</h2>
+    <div class="results" id="results"></div>
+</body>
+</html>

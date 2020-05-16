@@ -1,6 +1,6 @@
-const TOKEN = '2abbf7c3-245b-404f-9473-ade729ed4653';
-
 function validateToken( req, res, next ){
+    console.log("here");
+    console.log(req.headers);
     let token = null;
     if (req.headers.authorization) {
         token = req.headers.authorization;
@@ -9,21 +9,25 @@ function validateToken( req, res, next ){
     } else if (req.query.apiKey) {
         token = req.query.apiKey;
     }
+    console.log("here");
 
     if( !token ){
         res.statusMessage = "You need to send the 'authorization' token.";
         return res.status( 401 ).end();
     }
 
+    console.log("here");
     if (token.includes('Bearer')) {
         token = token.substring(7);
     }
 
-    if( token !== TOKEN ){
+    console.log("here");
+    if( token !== process.env.TOKEN ){
         res.statusMessage = "The 'authorization' TOKEN is invalid.";
         return res.status( 401 ).end();
     }
 
+    console.log("here");
     console.log('valid token...');
 
     next();
