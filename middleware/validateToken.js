@@ -22,7 +22,7 @@ function validateToken( req, res, next ){
     }
 
     console.log("here");
-    if( token !== process.env.TOKEN ){
+    if( token !== process.env.BOOK_API_KEY ){
         res.statusMessage = "The 'authorization' TOKEN is invalid.";
         return res.status( 401 ).end();
     }
