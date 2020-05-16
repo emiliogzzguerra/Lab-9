@@ -23,10 +23,11 @@ var corsOptions = {
 const app = express();
 const jsonParser = bodyParser.json();
 
-app.use(cors(corsOptions));
 app.use( express.static( 'public' ));
 app.use(morgan('dev'));
 app.use(validateToken)
+app.options('*', cors())
+
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
