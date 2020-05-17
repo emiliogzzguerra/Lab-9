@@ -95,33 +95,53 @@ const populateBookmarks = () => {
     }, (req, res) =>initialResponseHandler(req,res))
        .then(response => {
         let data = response.data;
-        let results;
-        results = document.querySelector(".results");
-        results.innerHTML = '';
-        for(let i = data.length - 1; i>=0; i--) {
-            let bookmark = data[i];
-            let deleteButton, editButton, separator;
-            deleteButton = document.createElement('button');
-            deleteButton.innerHTML = 'Delete bookmark';
-            deleteButton.addEventListener('click', () => { deleteBookmark(bookmark.id) });
-            editButton = document.createElement('button');
-            editButton.innerHTML = 'Edit bookmark';
-            editButton.addEventListener('click', (event) => { editBookmark(event, bookmark) });
-            separator = document.createElement('div');
-            separator.setAttribute('class', 'separator');
-            bookmarkContainer = document.createElement('div');
-            bookmarkContainer.setAttribute('id', bookmark.id);
-            bookmarkContainer.innerHTML = `
-                <a href="${bookmark.url}"><h3>${bookmark.title}</h3></a>
-                <p>Description: ${bookmark.description}</p>
-                <p>Rating (out of 5): ${bookmark.rating}</p>
-            `;
-            bookmarkContainer.appendChild(deleteButton);
-            bookmarkContainer.appendChild(editButton);
-            bookmarkContainer.prepend(separator);
-            results.appendChild(bookmarkContainer);
-        }
+        insertDataIntoResults(data);
     }).catch(err => errorHandler(err))
+}
+
+const insertDataIntoResults = (data) => {
+    let results;
+    results = document.querySelector(".results");
+    results.innerHTML = '';
+    for(let i = data.length - 1; i>=0; i--) {
+        let bookmark = data[i];
+        let deleteButton, editButton, separator;
+        deleteButton = document.createElement('button');
+        deleteButton.innerHTML = 'Delete bookmark';
+        deleteButton.addEventListener('click', () => { deleteBookmark(bookmark.id) });
+        editButton = document.createElement('button');
+        editButton.innerHTML = 'Edit bookmark';
+        editButton.addEventListener('click', (event) => { editBookmark(event, bookmark) });
+        separator = document.createElement('div');
+        separator.setAttribute('class', 'separator');
+        bookmarkContainer = document.createElement('div');
+        bookmarkContainer.setAttribute('id', bookmark.id);
+        bookmarkContainer.innerHTML = `
+            <a href="${bookmark.url}"><h3>${bookmark.title}</h3></a>
+            <p>Description: ${bookmark.description}</p>
+            <p>Rating (out of 5): ${bookmark.rating}</p>
+        `;
+        bookmarkContainer.appendChild(deleteButton);
+        bookmarkContainer.appendChild(editButton);
+        bookmarkContainer.prepend(separator);
+        results.appendChild(bookmarkContainer);
+    }
+}
+
+const fetchBookmarksByTitle = (title) => {
+    if (title == "") {
+        populateBookmarks();
+    } else {
+        axios.default.get(`/bookmark?title=${title}`, {
+            headers: {
+                "book-api-key": BOOK_API_KEY,
+            }
+        }, (req, res) =>initialResponseHandler(req,res))
+        .then(response => {
+            insertDataIntoResults(response.data);
+        })
+        .catch(err => errorHandler(err))
+    }
 }
 
 const retrieveNewBookmarkData = (formElement) => {
@@ -145,11 +165,16 @@ const retrieveNewBookmarkData = (formElement) => {
 window.addEventListener('load', function () {
     populateBookmarks();
     const createBookmarkForm = document.querySelector("#create-bookmark");
+    const filterByTitleInput = document.querySelector("#search-title");
 
     createBookmarkForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const bookmark = retrieveNewBookmarkData(event.target.parentElement);
         createBookmark(bookmark)
+    })
+
+    filterByTitleInput.addEventListener('input', (event) => {
+        fetchBookmarksByTitle(event.target.value);
     })
 
 })

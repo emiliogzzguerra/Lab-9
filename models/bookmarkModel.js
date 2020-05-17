@@ -55,8 +55,9 @@ const Bookmarks = {
                 })
     },
     getBookmark : function(title) {
+        console.log("heree", title)
         return bookmarksCollection
-                .find({title: title})
+                .find({title: {$regex : `.*${title}.*`}})
                 .then( bookmark => {
                     return bookmark;
                 })

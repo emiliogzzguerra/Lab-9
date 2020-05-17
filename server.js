@@ -31,11 +31,9 @@ app.options('*', cors())
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
-    console.log(process.env)
 }
 
 app.get( '/bookmarks', ( req, res ) => {
-    console.log("Entered the route...")
     Bookmarks
         .getAllBookmarks()
         .then( result => {
@@ -112,7 +110,6 @@ app.delete( '/bookmark/:id', ( req, res ) => {
         .deleteBookmark(bookmarkId)
         .then(response => {
             console.log(response);
-            console.log("inside app.delete");
             return res.status( 200 ).end();
         }).catch(err => {
             console.log("inside app.delete - error");
@@ -122,6 +119,7 @@ app.delete( '/bookmark/:id', ( req, res ) => {
 });
 
 app.get( '/bookmark', ( req, res ) => {
+    console.log("entered")
     var title = req.query.title;
 
     if (!title) {
@@ -140,7 +138,6 @@ app.get( '/bookmark', ( req, res ) => {
 
 app.listen( PORT, () => {
     console.log( "This server is running on port 8080" );
-    console.log("DATABASE_URL:", DATABASE_URL)
     new Promise( ( resolve, reject ) => {
         const settings = {
             useNewUrlParser: true, 
